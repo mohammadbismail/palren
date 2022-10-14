@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% block content%}
+
+<div class="container">
+    <div class="row">
+        <a href="/provider_dashboard/">
+            <button type="submit" class="btn-outline">My garage</button>
+        </a>
+    </div>
+    <div class="row gy-5 m-5 ">
+        <h4 class="text-center">Welcome, {{request.session.provider_name}}</h4>
+        <h5>Please fill below form to add your car</h5>
+        <div class="col car_form">
+            <div class="row car_details">
+                <form action="/my_dashboard/insert_car/" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="brand" class="form-label">Brand</label>
+                            <input type="text" class="form-control" name="brand" id="brand" required>
+                            <div class="invalid-feedback">
+                                Model is required.
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="model" class="form-label">Model</label>
+                            <input type="text" class="form-control" name="model" id="model" required>
+                            <div class="invalid-feedback">
+                                Model is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="color" class="form-label">Color</label>
+                            <input type="text" class="form-control" name="color" id="color" required>
+                            <div class="invalid-feedback">
+                                Color is required.
+                            </div>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="production_year" class="form-label">Production year</label>
+                            <input type="number" class="form-control" name="production_year" id="production_year"
+                                required>
+                            <div class="invalid-feedback">
+                                Production Year is required.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <label for="plate_number" class="form-label">Plate Number</label>
+                            <input type="number" class="form-control" name="plate_number" id="production_year"
+                                placeholder="" required>
+                        </div>
+                        <div class="col-lg-6">
+                            <label for="price" class="form-label">Price</label>
+                            <input type="number" class="form-control" name="price" id="production_year"
+                                placeholder="NIS" required>
+                            <div class="invalid-feedback">
+                                Production Year is required.
+                            </div>
+                        </div>
+                        <div class="row">
+                            <label for="photo" class="form-label">Car Photo</label>
+                            <input type="file" class="form-control" name="photo" id="photo">
+                        </div>
+                    </div>
+                    <div class="col-12 text-center">
+                        <button class="btn btn-secondary my-4 p-3" type="submit">Add Car</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <div class="row gy-4">
+            <div class="all_cars">
+                <h5>All my cars</h5>
+                <table class="table">
+                    <thead class="position">
+                        <tr>
+                            <th scope="col">Photo</th>
+                            <th scope="col">Car</th>
+                            <th scope="col">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for car in provider.cars.all %}
+                        <tr class="display">
+                            <td scope="row" name="photo"><img src="{{car.photo.url}}" alt="photo_test" width="20px" height="20px"></td>
+                            <td scope="row" name="car_id"><span>{{car.brand}}</span></td>
+                            <td>
+                                <input type="hidden" name="car_id" value="{{ car.id }}">
+                                <a href="/my_dashboard/edit_car/{{car.id}}/">Edit</a>
+                                <a href="/my_dashboard/delete_car/{{car.id}}/">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    {% endblock %}
